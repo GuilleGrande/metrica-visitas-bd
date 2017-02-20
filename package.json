@@ -1,0 +1,24 @@
+{
+  "name": "metrica-visitas-bd",
+  "version": "1.0.0",
+  "description": "Actividad 2 (Mini-proyecto) de la materia Base de Datos de la Universidad Metropolitana.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuilleGrande/metrica-visitas-bd.git"
+  },
+  "author": "Guillermom Grande, Carlos Medina & Vincent Perez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GuilleGrande/metrica-visitas-bd/issues"
+  },
+  "homepage": "https://github.com/GuilleGrande/metrica-visitas-bd#readme",
+  "dependencies": {
+    "hapi": "^16.1.0",
+    "mysql": "^2.13.0",
+    "sequelize": "^3.30.2"
+  }
+}
