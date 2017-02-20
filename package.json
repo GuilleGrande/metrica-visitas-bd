@@ -18,6 +18,7 @@
   "homepage": "https://github.com/GuilleGrande/metrica-visitas-bd#readme",
   "dependencies": {
     "hapi": "^16.1.0",
+    "inert": "^4.1.0",
     "mysql": "^2.13.0",
     "sequelize": "^3.30.2"
   }
