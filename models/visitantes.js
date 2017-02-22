@@ -5,7 +5,11 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
+      getId: function()  {
+        var id = this.getDataValue('id');
+        return id;
+      }
     },
     ip_address: {
       type: DataTypes.STRING,
@@ -20,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
             model: models.vistas_visitantes,
             unique: false
           },
-          foreignKey: 'id_visitantes',
+          foreignKey: 'id_vistas',
             
         });
       }

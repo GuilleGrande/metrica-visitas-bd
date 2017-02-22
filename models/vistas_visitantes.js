@@ -8,10 +8,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     id_visitantes: {
       type: DataTypes.INTEGER,
+      foreignKey: true,
       allowNull: false
     },
     id_vistas: {
       type: DataTypes.INTEGER,
+      foreignKey: true,
       allowNull: false
     }
   }, {
@@ -23,17 +25,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-  
-  vistas.belongsToMany(visitantes, {
-  through: {
-    model: vistas_visitantes,
-    unique: false
-  },
-  foreignKey: 'id_vistas'
-  
-  });
-  
-  
-  
+ 
   return vistas_visitantes;
 };

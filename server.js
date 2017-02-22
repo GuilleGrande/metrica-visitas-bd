@@ -3,14 +3,8 @@
 const Hapi = require('hapi');
 const Sequelize = require('sequelize');
 const models = require('./models');
-
+const Path = require('path')
 const server = new Hapi.Server();
-
-const sequelize = new Sequelize('c9', 'guillegrande', {
-    host: process.env.IP,
-    dialect: 'mysql'
-});
-
 
 server.connection({ 
     host: process.env.IP, 
@@ -25,24 +19,132 @@ server.register(require('inert'), (err) => {
     
     server.route({
         method: 'GET',
-        path:'/hello', 
+        path:'/', 
         handler: function (request, reply) {
-            reply("hello world");
+            reply.file('./views/visitas.html');
         }
     });
 
     server.route({
         method: 'GET',
-        path: '/evaluacion',
+        path: '/vista-1',
         handler: function (request, reply) {
-            reply.file('./views/evaluacion.html');
+            reply.file('./views/vista-1.html');
+            
+            var visita = {
+                ip_address: request.headers['x-forwarded-for'] || request.info.remoteAddress,
+            };
+            
+            var visitante = models.visitantes;
+            models.sequelize.sync().then(function(){
+                visitante.create({
+                    ip_address: visita.ip_address,
+                });
+            });
+            
+            var id_visitante = models.sequelize.query('SELECT "id" FROM visitantes WHERE ip_address = $ip_address', 
+                                                        { bind: { ip_address: visita.ip_address }, 
+                                                        type: models.sequelize.QueryTypes.SELECT });
+            
+            var vista_visitante = models.vistas_visitantes;
+            models.sequelize.sync().then(function() {
+               vista_visitante.create({
+                   id_visitantes: id_visitante,
+                   id_vistas: 1
+               }); 
+            });
         }
     });
+    
+    server.route({
+        method: 'GET',
+        path: '/vista-2',
+        handler: function (request, reply) {
+            reply.file('./views/vista-2.html');
+            
+            var visita = {
+                ip_address: request.headers['x-forwarded-for'] || request.info.remoteAddress,
+            };
+            
+            var visitante = models.visitantes;
+            models.sequelize.sync().then(function(){
+                visitante.create({
+                    ip_address: visita.ip_address,
+                });
+            });
+            
+            var vista_visitante = models.vistas_visitantes;
+            models.sequelize.sync().then(function() {
+               vista_visitante.create({
+                   id_visitantes: models.sequelize.query('SELECT "id" FROM visitantes WHERE ip_address = $ip_address', 
+                                                        { bind: { ip_address: visita.ip_address }, type: models.sequelize.QueryTypes.SELECT }),
+                   id_vistas: 2
+               }); 
+            });
+        }
+    });
+    
+    server.route({
+        method: 'GET',
+        path: '/vista-3',
+        handler: function (request, reply) {
+            reply.file('./views/vista-3.html');
+            
+            var visita = {
+                ip_address: request.headers['x-forwarded-for'] || request.info.remoteAddress,
+            };
+            
+            var visitante = models.visitantes;
+            models.sequelize.sync().then(function(){
+                visitante.create({
+                    ip_address: visita.ip_address,
+                });
+            });
+            
+            var vista_visitante = models.vistas_visitantes;
+            models.sequelize.sync().then(function() {
+               vista_visitante.create({
+                   id_visitantes: models.sequelize.query('SELECT "id" FROM visitantes WHERE ip_address = $ip_address', 
+                                                        { bind: { ip_address: visita.ip_address }, type: models.sequelize.QueryTypes.SELECT }),
+                   id_vistas: 3
+               }); 
+            });
+        }
+    });
+    
+    server.route({
+        method: 'GET',
+        path: '/visitas',
+        handler: function (request, reply) {
+            reply.file('./views/visitas.html');
+            
+            var visita = {
+                ip_address: request.headers['x-forwarded-for'] || request.info.remoteAddress,
+            };
+            
+            var visitante = models.visitantes;
+            models.sequelize.sync().then(function(){
+                visitante.create({
+                    ip_address: visita.ip_address,
+                });
+            });
+            
+            var vista_visitante = models.vistas_visitantes;
+            models.sequelize.sync().then(function() {
+               vista_visitante.create({
+                   id_visitantes: models.sequelize.query('SELECT "id" FROM visitantes WHERE ip_address = $ip_address', 
+                                                        { bind: { ip_address: visita.ip_address }, type: models.sequelize.QueryTypes.SELECT }),
+                   id_vistas: 4
+               }); 
+            });
+        }
+    });
+    
 });
 
 
 
-models.sequelize.sync({force: true}).then(function(){
+models.sequelize.sync({}).then(function(){
     server.start((err) => {
         if (err) {
             throw err;
